@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infos Pays</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.8rem;
+        }
+        
+        form {
+            display: flex;
+            margin-bottom: 25px;
+            gap: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .error {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 4px;
+        }
+        
+        .country-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .country-info {
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+        
+        .country-info strong {
+            color: var(--secondary-color);
+            display: inline-block;
+            width: 100px;
+        }
+        
+        .flag-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .flag-container img {
+            max-width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        @media (max-width: 768px) {
+            form {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Recherche d'Informations sur un Pays</h1>
+   
+    <form method="POST">
+        <input type="text" name="country" placeholder="Entrez un pays..." required>
+        <button type="submit">Rechercher</button>
+    </form>
+    
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    {% if country_info %}
+        <div class="country-card">
+            <h2>Informations sur {{ country_info.name }}</h2>
+            
+            <div class="country-info">
+                <strong>Capitale :</strong> {{ country_info.capital }}
+            </div>
+           
+            {% if country_info.currency %}
+                <div class="country-info">
+                    <strong>Devise :</strong> {{ country_info.currency.sName }} ({{ country_info.currency.sISOCode }})
+                </div>
+            {% endif %}
+            
+            <div class="country-info">
+                <strong>Indicatif :</strong> +{{ country_info.phone_code }}
+            </div>
+            
+            <div class="country-info">
+                <strong>Continent :</strong> {{ country_info.continent }}
+            </div>
+            
+            {% if country_info.flag %}
+                <div class="flag-container">
+                    <p><strong>Drapeau :</strong></p>
+                    <img src="{{ country_info.flag }}" alt="Drapeau de {{ country_info.name }}">
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</body>
+</html>
